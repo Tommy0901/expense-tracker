@@ -31,9 +31,9 @@ block body
             td= record.name
             td= record.date
             td= record.expense
-            td: a(href="#") 
+            td: a(href="/edit/"+ record.id) 
                   i.fa-solid.fa-pen-to-square
             td: a(href="#" style="color:rgb(234, 2, 2); border:none;") 
                   i.fa-solid.fa-trash-can
   .d-flex.justify-content-center
-    a.btn.btn-warning(href="#" role="button") 新增支出
+    a.btn.btn-warning(href="/new" role="button") 新增支出
