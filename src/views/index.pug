@@ -1,4 +1,39 @@
 extends layouts/main
 
-block content 
-  p #{greetings}
+block body 
+  .card.mx-auto(style="width: 80%; border:none; margin-top:5%")
+  .row.mb-3
+    select.form-select(aria-label="Default select example")
+      option(selected) 類別
+      option(value="1") 食
+      option(value="2") 衣
+      option(value="3") 住
+      option(value="4") 行
+      option(value="5") 育
+      option(value="6") 樂
+  .mb-3
+    span 總花費：
+    span.fs-3.fw-bolder.text-danger='$' + total
+  .mb-3
+    table.table.table-striped
+      thead
+        tr
+          th(scope="col") 類別
+          th(scope="col") 名稱
+          th(scope="col") 日期
+          th(scope="col") 金額
+          th(scope="col") 編輯
+          th(scope="col") 刪除
+      tbody
+        each record, i in records
+          tr
+            td: i(class="fa-solid " + record.category)
+            td= record.name
+            td= record.date
+            td= record.expense
+            td: a(href="#") 
+                  i.fa-solid.fa-pen-to-square
+            td: a(href="#" style="color:rgb(234, 2, 2); border:none;") 
+                  i.fa-solid.fa-trash-can
+  .d-flex.justify-content-center
+    a.btn.btn-warning(href="#" role="button") 新增支出
