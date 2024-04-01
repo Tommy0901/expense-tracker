@@ -1,5 +1,30 @@
 extends layouts/main
 
 block body  
-  p
-  h3 登入帳號
+  .d-flex.border(style="width:50%; margin: 0 auto;")
+    .login.d-flex.flex-column.align-items-center(style="width:100%")
+      .p-5
+        h1.text-center.mb-4 Account Login
+
+        form(action="/login", method="post")
+          .mb-3
+            label.form-label(for="Email") Email
+            input.form-control(type="email", id="Email", placeholder="Email", name="email", value=email)
+          .mb-3
+            label.form-label(for="Password") Password
+            input.form-control(type="password", id="Password", placeholder="Password", name="password", value=password)
+          .mb-3
+            input.form-check-input.me-1(type="checkbox", id="rememberMe", name="rememberMe")
+            label(for="rememberMe") Remember Me
+          .d-flex.justify-content-center.my-4.flex-column
+            button.btn.btn-primary.mb-2(type="submit") Sign In
+            .d-flex.justify-content-evenly.mt-3
+              a(href="#")
+                img(src="https://cdn2.iconfinder.com/data/icons/social-media-2285/512/1_Facebook_colored_svg_copy-256.png", alt="facebook", style="width: 3.5rem; height: 3.5rem;")
+              a(href="#")
+                img(src="https://cdn2.iconfinder.com/data/icons/social-media-free-20/32/google_search_online_social_media-2-256.png", alt="google", style="width: 3.5rem; height: 3.5rem;")
+              a(href="#")
+                img(src="https://cdn4.iconfinder.com/data/icons/miu-black-social-2/60/github-256.png", alt="github", style="width: 3.5rem; height: 3.5rem;")
+          .d-flex.justify-content-center.align-items-center.mt-4
+            h5 Don't have an Account?
+            a.btn.btn-outline-dark.ms-4(href="/register", style="white-space: nowrap;") Sign Up

@@ -6,9 +6,11 @@
   "scripts": {
     "start": "node dist/app.js",
     "dev": "nodemon src/app.ts",
-    "build": "tsc -p ./ && npm run view",
+    "build": "tsc -p ./ && npm run view && npm run public",
     "view": "npm run view-dir && xcopy /Y /E src\\views\\* dist\\views\\",
     "view-dir": "if not exist dist\\views mkdir dist\\views",
+    "public": "npm run public-dir && xcopy /Y /E src\\public\\* dist\\public\\",
+    "public-dir": "if not exist dist\\public mkdir dist\\public\\javascripts dist\\public\\stylesheets",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

@@ -1,0 +1,60 @@
+.fa-trash-can:hover {
+  color: black;
+}
+
+.table td,
+.table th {
+  padding: 1.2rem;
+}
+
+th,
+td {
+  text-align: center;
+}
+
+.record-category{
+  display: none;
+}
+
+#register-no-account {
+  position: relative;
+  width: 35%;
+  background: url("https://plus.unsplash.com/premium_photo-1681291882655-b798cc0882bb?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+  background-repeat: no-repeat;
+  background-position: 50% center;
+  background-size: auto 100%;
+  text-align: center;
+}
+
+#register-no-account::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(255, 255, 255, 0.25);
+}
+
+.login-new-content {
+  position: relative;
+  top: 25%;
+}
+.login-new-content h5,
+p {
+  text-shadow: 0.05em 0.05em 0.15em rgba(147, 147, 147, 0.866);
+}
+
+.delete-icon {
+  color: rgb(234, 2, 2);
+  background: none;
+  border: none;
+}
+
+.edit-icon {
+  color: rgb(46, 102, 232);
+}
+
+.input-group-text {
+  width: 25%;
+}

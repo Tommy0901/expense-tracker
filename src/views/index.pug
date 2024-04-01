@@ -1,8 +1,19 @@
 extends layouts/main
 
 block body 
-  .card.mx-auto(style="width: 80%; border:none; margin-top:5%")
-  .row.mb-3
+  .mb-3
+    .card.border-0
+      .card-body.d-flex.flex-column.align-items-center
+        h5.card-title.fw-bold Your Balance  
+        h6.card-text.fs-3.fw-bolder.text-info $3300
+        .row.py-2.shadow-sm.border.rounded-3.font-monospace(style="width: 70%;")
+          .col.border-end.text-center
+            h6 Income
+            h4.card-text.fs-3.fw-bolder.text-success $6000
+          .col.border-end.text-center
+            h6 Expense
+            h4.card-text.fs-3.fw-bolder.text-danger='$' + total
+  .mb-3.row
     select.form-select(aria-label="Default select example")
       option(selected) 類別
       option(value="1") 食
@@ -12,18 +23,16 @@ block body
       option(value="5") 育
       option(value="6") 樂
   .mb-3
-    span 總花費：
-    span.fs-3.fw-bolder.text-danger='$' + total
-  .mb-3
     table.table.table-striped
-      thead
+      thead.table-dark
         tr
-          th(scope="col") 類別
-          th(scope="col") 名稱
-          th(scope="col") 日期
-          th(scope="col") 金額
-          th(scope="col") 編輯
-          th(scope="col") 刪除
+          th(scope="col") Type
+          th(scope="col") Item
+          th(scope="col") Date
+          th(scope="col") Amount
+          th(scope="col") Class
+          th(scope="col") Edit
+          th(scope="col") Remove
       tbody
         each record, i in records
           tr
@@ -31,9 +40,10 @@ block body
             td= record.name
             td= record.date
             td= record.expense
+            td 支出
             td: a(href="/edit/"+ record.id) 
                   i.fa-solid.fa-pen-to-square
-            td: a(href="#" style="color:rgb(234, 2, 2); border:none;") 
+            td: a(href="#") 
                   i.fa-solid.fa-trash-can
   .d-flex.justify-content-center
-    a.btn.btn-warning(href="/new" role="button") 新增支出
+    a.btn.btn-warning(href="/new" role="button") New Record
