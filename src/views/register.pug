@@ -1,8 +1,11 @@
 extends layouts/main
 
-block body  
-  .d-flex.border
-    .login.d-flex.flex-column.align-items-center(style="width:67%")
+block navbar 
+  a.btn.btn-outline-primary(href="/login", role="button") Log In
+
+block body 
+  .d-flex.border.mx-auto(style="width: 70%;")
+    .login.d-flex.flex-column.align-items-center(style="width: 67%;")
       .p-5(style="width: 80%")
         h1.text-center.mb-4 Register
 
@@ -21,14 +24,9 @@ block body
             input.form-control(type="password", id="confirmPassword", placeholder="hit the same password again", name="confirmPassword", value=confirmPassword)
           .d-flex.justify-content-center.my-4.flex-column
             button.btn.btn-primary.mt-1.mb-2(type="submit") Sign Up
-            .d-flex.justify-content-evenly.mt-3
-              a(href="#")
-                img(src="https://cdn2.iconfinder.com/data/icons/social-media-2285/512/1_Facebook_colored_svg_copy-256.png", alt="facebook", style="width: 3.5rem; height: 3.5rem;")
-              a(href="#")
-                img(src="https://cdn2.iconfinder.com/data/icons/social-media-free-20/32/google_search_online_social_media-2-256.png", alt="google", style="width: 3.5rem; height: 3.5rem;")
-              a(href="#")
-                img(src="https://cdn4.iconfinder.com/data/icons/miu-black-social-2/60/github-256.png", alt="github", style="width: 3.5rem; height: 3.5rem;")
-          .d-flex.justify-content-center.align-items-center.mt-4
-            h5 Already have an Account?
+            .d-flex.justify-content-evenly.mt-3.SSO
+              include partials/oauth-icon
+          .d-flex.justify-content-center.align-items-center.text-center.mt-4
+            h5.pt-2 Already have an Account?
             a.btn.btn-outline-info.ms-4(href="/login", style="white-space: nowrap;") Sign In
     #register-no-account 

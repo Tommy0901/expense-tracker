@@ -1,49 +1,53 @@
 extends layouts/main
 
-block body 
-  .mb-3
-    .card.border-0
-      .card-body.d-flex.flex-column.align-items-center
-        h5.card-title.fw-bold Your Balance  
-        h6.card-text.fs-3.fw-bolder.text-info $3300
-        .row.py-2.shadow-sm.border.rounded-3.font-monospace(style="width: 70%;")
-          .col.border-end.text-center
-            h6 Income
-            h4.card-text.fs-3.fw-bolder.text-success $6000
-          .col.border-end.text-center
-            h6 Expense
-            h4.card-text.fs-3.fw-bolder.text-danger='$' + total
-  .mb-3.row
-    select.form-select(aria-label="Default select example")
-      option(selected) 類別
-      option(value="1") 食
-      option(value="2") 衣
-      option(value="3") 住
-      option(value="4") 行
-      option(value="5") 育
-      option(value="6") 樂
-  .mb-3
-    table.table.table-striped
-      thead.table-dark
-        tr
-          th(scope="col") Type
-          th(scope="col") Item
-          th(scope="col") Date
-          th(scope="col") Amount
-          th(scope="col") Class
-          th(scope="col") Edit
-          th(scope="col") Remove
-      tbody
-        each record, i in records
+block navbar 
+  a.btn.btn-outline-primary(href="/logout", role="button") Sign out
+
+block body
+  .container
+    .mb-3
+      .card.border-0
+        .card-body.d-flex.flex-column.align-items-center
+          h5.card-title.fw-bold Your Balance  
+          h6.card-text.fs-3.fw-bolder.text-info $3300
+          .row.py-2.shadow-sm.border.rounded-3.font-monospace(style="width: 70%;")
+            .col.border-end.text-center
+              h6 Income
+              h4.card-text.fs-3.fw-bolder.text-success $6000
+            .col.border-end.text-center
+              h6 Expense
+              h4.card-text.fs-3.fw-bolder.text-danger='$' + total
+    .mb-3.row
+      select.form-select(aria-label="Default select example")
+        option(selected) 類別
+        option(value="1") 飲食
+        option(value="2") 服飾
+        option(value="3") 交通
+        option(value="4") 住宿
+        option(value="5") 教育
+        option(value="6") 娛樂
+    .mb-3
+      table.table.table-striped
+        thead.table-dark
           tr
-            td: i(class="fa-solid " + record.category)
-            td= record.name
-            td= record.date
-            td= record.expense
-            td 支出
-            td: a(href="/edit/"+ record.id) 
-                  i.fa-solid.fa-pen-to-square
-            td: a(href="#") 
-                  i.fa-solid.fa-trash-can
-  .d-flex.justify-content-center
-    a.btn.btn-warning(href="/new" role="button") New Record
+            th(scope="col") Type
+            th(scope="col") Item
+            th(scope="col") Date
+            th(scope="col") Amount
+            th(scope="col") Class
+            th(scope="col") Edit
+            th(scope="col") Remove
+        tbody
+          each record, i in records
+            tr
+              td: i(class="fa-solid " + record.category)
+              td= record.name
+              td= record.date
+              td= record.expense
+              td 支出
+              td: a(href="/edit/"+ record.id) 
+                    i.fa-solid.fa-pen-to-square
+              td: a(href="#") 
+                    i.fa-solid.fa-trash-can
+    .d-flex.justify-content-center
+      a.btn.btn-warning(href="/new" role="button") New Record

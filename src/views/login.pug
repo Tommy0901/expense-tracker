@@ -1,8 +1,8 @@
 extends layouts/main
 
-block body  
-  .d-flex.border(style="width:50%; margin: 0 auto;")
-    .login.d-flex.flex-column.align-items-center(style="width:100%")
+block body 
+  .border(style="width:600px; margin: 0 auto;")
+    .login.d-flex.flex-column.align-items-center
       .p-5
         h1.text-center.mb-4 Account Login
 
@@ -18,13 +18,8 @@ block body
             label(for="rememberMe") Remember Me
           .d-flex.justify-content-center.my-4.flex-column
             button.btn.btn-primary.mb-2(type="submit") Sign In
-            .d-flex.justify-content-evenly.mt-3
-              a(href="#")
-                img(src="https://cdn2.iconfinder.com/data/icons/social-media-2285/512/1_Facebook_colored_svg_copy-256.png", alt="facebook", style="width: 3.5rem; height: 3.5rem;")
-              a(href="#")
-                img(src="https://cdn2.iconfinder.com/data/icons/social-media-free-20/32/google_search_online_social_media-2-256.png", alt="google", style="width: 3.5rem; height: 3.5rem;")
-              a(href="#")
-                img(src="https://cdn4.iconfinder.com/data/icons/miu-black-social-2/60/github-256.png", alt="github", style="width: 3.5rem; height: 3.5rem;")
-          .d-flex.justify-content-center.align-items-center.mt-4
-            h5 Don't have an Account?
+            .d-flex.justify-content-evenly.mt-3.SSO
+              include partials/oauth-icon
+          .d-flex.justify-content-center.align-items-center.text-center.mt-4
+            h5.pt-2 Don't have an Account?
             a.btn.btn-outline-dark.ms-4(href="/register", style="white-space: nowrap;") Sign Up

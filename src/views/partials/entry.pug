@@ -1,0 +1,24 @@
+div.mb-3.d-flex
+  label.input-group-text(for="numberType") Class
+  select.form-select(name="numberType", id="numberType", required)
+    option(value="0", selected=(numberType === "0")) 支出
+    option(value="1", selected=(numberType === "1")) 收入
+div.mb-3.d-flex
+  label.input-group-text(for="name") Item Name
+  input.form-control(type="text", id="name", name="name", value=name)
+div.mb-3.d-flex
+  label.input-group-text(for="date") Date*
+  input.form-control(type="date", name="date", id="date", value=date)
+div.mb-3.d-flex
+  label.input-group-text(for="category") Type
+  select.form-select(name="category", id="category", required)
+    option(value="") Choose...
+    option(value="1") 飲食
+    option(value="2") 服飾
+    option(value="3") 交通
+    option(value="4") 住宿
+    option(value="5") 教育
+    option(value="6") 娛樂
+div.mb-3.d-flex
+  label.input-group-text(for="amount") Amount
+  input.form-control(type="number", id="amount", name="amount", min="1", value=amount)

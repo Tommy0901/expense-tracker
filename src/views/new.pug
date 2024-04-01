@@ -1,5 +1,15 @@
 extends layouts/main
 
-block body  
-  p
-  h3 新增支出
+block navbar 
+  a.btn.btn-outline-primary(href="/logout", role="button") Sign out
+
+block body 
+  .container(style="width: 70%;")
+    .d-flex.flex-column.align-items-center
+      h3.mt-2 Create a new entry
+      .my-3(style="width: 80%;")
+        form(action="/new", method="POST")
+          include partials/entry
+          .btn-control.d-flex.just-content-evenly
+            button.btn.btn-info.mx-auto.mt-3(style="width: 14rem;") Submit
+            a.btn.btn-dark.mx-auto.mt-3(style="width: 14rem", href="/") Back
