@@ -1,0 +1,26 @@
+[
+  {
+    "type": "飲食",
+    "icon": "fa-solid fa-utensils"
+  },
+  {
+    "type": "服飾",
+    "icon": "fa-solid fa-shirt"
+  },
+  {
+    "type": "交通",
+    "icon": "fa-solid fa-van-shuttle"
+  },
+  {
+    "type": "住宿",
+    "icon": "fa-solid fa-house"
+  },
+  {
+    "type": "教育",
+    "icon": "fa-solid fa-pen"
+  },
+  {
+    "type": "娛樂",
+    "icon": "fa-solid fa-face-grin-beam"
+  }
+]

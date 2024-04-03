@@ -1,0 +1,23 @@
+[
+  {
+    "type": "住宿",
+    "item": "B&B",
+    "date": "2024-12-10",
+    "amount": 1500,
+    "class": "支出"
+  },
+  {
+    "type": "交通",
+    "item": "Taxi",
+    "date": "2024-12-10",
+    "amount": 600,
+    "class": "支出"
+  },
+  {
+    "type": "娛樂",
+    "item": "Recreation",
+    "date": "2024-12-10",
+    "amount": 600,
+    "class": "支出"
+  }
+]
