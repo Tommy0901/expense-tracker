@@ -1,6 +1,8 @@
 import RecordController from '../controllers/record-controller'
 import Route from './route'
 
+import { authenticated } from '../middlewares/auth-handler'
+
 class RecordRoute extends Route {
   private readonly recordController = new RecordController()
 
@@ -10,13 +12,13 @@ class RecordRoute extends Route {
   }
 
   protected setRoutes (): void {
-    this.router.get('/edit/:id',
+    this.router.get('/edit/:id', authenticated,
       this.recordController.editRecord.bind(this.recordController)
     )
-    this.router.get('/new',
+    this.router.get('/new', authenticated,
       this.recordController.addRecord.bind(this.recordController)
     )
-    this.router.get('/',
+    this.router.get('/', authenticated,
       this.recordController.getRecords.bind(this.recordController)
     )
   }

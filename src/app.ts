@@ -1,4 +1,6 @@
 import express from 'express'
+import session from 'express-session'
+import passport from './config/passport'
 import dotenv from 'dotenv'
 import path from 'path'
 
@@ -8,6 +10,7 @@ import { connectToMongoDB } from './config/mongoose'
 
 if (process.env.NODE_ENV !== 'production') dotenv.config()
 if (process.env.MONGODB_URI == null) throw new Error('MONGODB_URI is not defined.')
+if (process.env.SESSION_SECRET == null) throw new Error('SESSION_SECRET is not defined.')
 
 connectToMongoDB(process.env.MONGODB_URI)
 
@@ -19,6 +22,16 @@ app.locals = timeHelpers
 app.set('view engine', 'pug')
 app.set('views', path.join(__dirname, 'views'))
 
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false
+}))
+
+app.use(passport.initialize())
+app.use(passport.session())
+
+app.use(express.urlencoded({ extended: true }))
 app.use(express.static(path.join(__dirname, 'public')))
 
 for (const route of router) {
