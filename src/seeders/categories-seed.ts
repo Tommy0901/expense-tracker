@@ -1,4 +1,4 @@
-import Category from '../models/category'
+import { Category } from '../models'
 import categories from './intial/categories.json'
 
 export async function initializeCategories (): Promise<void> {

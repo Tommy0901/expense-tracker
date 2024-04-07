@@ -1,6 +1,4 @@
-import User from '../models/user'
-import Category from '../models/category'
-import Record from '../models/record'
+import { User, Record, Category } from '../models'
 import records from './intial/records.json'
 
 interface RecordWithIds {
