@@ -1,12 +1,11 @@
 import express from 'express'
 import session from 'express-session'
-import passport from './config/passport'
 import dotenv from 'dotenv'
 import path from 'path'
 
 import timeHelpers from './helpers/time-helpers'
 import { router } from './routes/router'
-import { connectToMongoDB } from './config/mongoose'
+import { passport, connectToMongoDB } from './config'
 
 if (process.env.NODE_ENV !== 'production') dotenv.config()
 if (process.env.MONGODB_URI == null) throw new Error('MONGODB_URI is not defined.')
