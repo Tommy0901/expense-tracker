@@ -8,7 +8,7 @@ block body
     .d-flex.flex-column.align-items-center
       h3.mt-2 Revise entry
       .my-3(style="width: 80%;")
-        form(action="/edit/" + id, method="POST")
+        form(action="/edit/" + id+ "?_method=PUT", method="POST")
           include partials/entry
           .btn-control.d-flex.just-content-evenly
             button.btn.btn-success.mx-auto.mt-3(style="width: 14rem;") Update

@@ -9,23 +9,23 @@ block body
       .card.border-0
         .card-body.d-flex.flex-column.align-items-center
           h5.card-title.fw-bold Your Balance  
-          h6.card-text.fs-3.fw-bolder.text-info $3300
+          h6.card-text.fs-3.fw-bolder.text-info='$' + balance
           .row.py-2.shadow-sm.border.rounded-3.font-monospace(style="width: 70%;")
             .col.border-end.text-center
               h6 Income
-              h4.card-text.fs-3.fw-bolder.text-success $6000
+              h4.card-text.fs-3.fw-bolder.text-success='$' + income
             .col.border-end.text-center
               h6 Expense
-              h4.card-text.fs-3.fw-bolder.text-danger='$' + total
+              h4.card-text.fs-3.fw-bolder.text-danger='$' + totalExpenses
     .mb-3.row
       select.form-select(aria-label="Default select example")
         option(selected) 類別
-        option(value="1") 飲食
-        option(value="2") 服飾
-        option(value="3") 交通
-        option(value="4") 住宿
-        option(value="5") 教育
-        option(value="6") 娛樂
+        option(value="飲食") 飲食
+        option(value="服飾") 服飾
+        option(value="交通") 交通
+        option(value="住宿") 住宿
+        option(value="教育") 教育
+        option(value="娛樂") 娛樂
     .mb-3
       table.table.table-striped
         thead.table-dark
@@ -40,14 +40,15 @@ block body
         tbody
           each record, i in records
             tr
-              td: i(class="fa-solid " + record.category)
-              td= record.name
+              td: i(class=record.categoryId.icon) 
+              td= record.item
               td= record.date
-              td= record.expense
-              td 支出
-              td: a(href="/edit/"+ record.id) 
+              td= record.amount
+              td= record.class
+              td: a(href="/edit/"+ record._id) 
                     i.fa-solid.fa-pen-to-square
-              td: a(href="#") 
-                    i.fa-solid.fa-trash-can
+              td: form(action="/remove/" + record._id + "?_method=DELETE", method="POST", style="display: inline;") 
+                    button.delete-icon(type="submit")
+                      i.fa-solid.fa-trash-can
     .d-flex.justify-content-center
       a.btn.btn-warning(href="/new" role="button") New Record
