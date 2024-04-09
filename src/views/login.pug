@@ -14,7 +14,7 @@ block body
             label.form-label(for="Password") Password
             input.form-control(type="password", id="Password", placeholder="Password", name="password", value=password)
           .mb-3
-            input.form-check-input.me-1(type="checkbox", id="rememberMe", name="rememberMe")
+            input.form-check-input.me-1(type="checkbox", id="rememberMe", name="rememberMe", checked=rememberMe? true : false)
             label(for="rememberMe") Remember Me
           .d-flex.justify-content-center.my-4.flex-column
             button.btn.btn-primary.mb-2(type="submit") Sign In

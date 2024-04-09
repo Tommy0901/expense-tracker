@@ -1,4 +1,5 @@
 import express from 'express'
+import cookieParser from 'cookie-parser'
 import session from 'express-session'
 import dotenv from 'dotenv'
 import path from 'path'
@@ -21,6 +22,10 @@ app.locals = timeHelpers
 app.set('view engine', 'pug')
 app.set('views', path.join(__dirname, 'views'))
 
+app.use(express.static(path.join(__dirname, 'public')))
+app.use(express.urlencoded({ extended: true }))
+
+app.use(cookieParser())
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
@@ -29,9 +34,6 @@ app.use(session({
 
 app.use(passport.initialize())
 app.use(passport.session())
-
-app.use(express.urlencoded({ extended: true }))
-app.use(express.static(path.join(__dirname, 'public')))
 
 for (const route of router) {
   app.use(route.getRouter())

@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs'
 
 import { User } from '../models'
 
+import { setCookies } from '../middlewares/cookie-handler'
 import { allNotNullOrEmpty } from '../helpers/validation-helper'
 
 class UserController {
@@ -42,9 +43,11 @@ class UserController {
   }
 
   signIn (req: Request, res: Response, next: NextFunction): void {
-    if (req.method === 'GET') { res.render('login'); return }
+    if (req.method === 'GET') {
+      res.render('login', { ...req.cookies?.mySpending as { email: string, remember: string } | '' }); return
+    }
 
-    const { email, password } = req.body
+    const { email, password, rememberMe } = req.body as { email: string, password: string, rememberMe: string | undefined }
 
     void (async () => {
       try {
@@ -53,10 +56,12 @@ class UserController {
           res.send('Incorrect username or password.'); return
         }
 
-        const passwordMatch = await bcrypt.compare(String(password), user.password)
+        const passwordMatch = await bcrypt.compare(password, user.password)
         if (!passwordMatch) {
           res.send('Incorrect username or password.'); return
         }
+
+        setCookies(req, res, user.email, rememberMe)
 
         req.logIn(user, err => {
           err != null ? next(err) : res.redirect('/')
