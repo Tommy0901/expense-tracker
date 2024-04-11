@@ -12,6 +12,9 @@
     "public": "npm run public-dir && xcopy /Y /E src\\public\\* dist\\public\\",
     "public-dir": "if not exist dist\\public mkdir dist\\public\\javascripts dist\\public\\stylesheets",
     "seed": "node dist/seeders",
+    "docker-build":"tsc -p ./ && cp .env dist && npm run docker-view && npm run docker-public",
+    "docker-view": "mkdir -p dist/views && cp -r src/views/* dist/views/",
+    "docker-public": "mkdir -p dist/public/javascripts && mkdir -p dist/public/stylesheets && cp -r src/public/* dist/public/",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
