@@ -4,10 +4,10 @@ block navbar
   a.btn.btn-outline-primary(href="/logout", role="button") Sign out
 
 block body 
-  .container(style="width: 70%;")
+  .container(style="width: 720px;")
     .d-flex.flex-column.align-items-center
       h3.mt-2 Create a new entry
-      .my-3(style="width: 80%;")
+      .my-3(style="width: 100%;")
         form(action="/new", method="POST")
           include partials/entry
           .btn-control.d-flex.just-content-evenly

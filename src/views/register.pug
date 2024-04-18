@@ -4,9 +4,9 @@ block navbar
   a.btn.btn-outline-primary(href="/login", role="button") Log In
 
 block body 
-  .d-flex.border.mx-auto(style="width: 70%;")
-    .login.d-flex.flex-column.align-items-center(style="width: 67%;")
-      .p-5(style="width: 80%")
+  .d-flex.border.mx-auto(style="width: 960px;")
+    .login.d-flex.flex-column.align-items-center(style="width: 75%;")
+      .p-5
         h1.text-center.mb-4 Register
 
         form(action="/register", method="post")
@@ -29,4 +29,4 @@ block body
           .d-flex.justify-content-center.align-items-center.text-center.mt-4
             h5.pt-2 Already have an Account?
             a.btn.btn-outline-info.ms-4(href="/login", style="white-space: nowrap;") Sign In
-    #register-no-account 
+    #register-no-account(style="width: 50%;")
