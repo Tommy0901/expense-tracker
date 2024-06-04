@@ -21,9 +21,9 @@ const port = 3000
 app.locals = timeHelpers
 
 app.set('view engine', 'pug')
-app.set('views', path.join(__dirname, 'views'))
+app.set('views', path.join(__dirname, '..', 'views'))
 
-app.use(express.static(path.join(__dirname, 'public')))
+app.use(express.static(path.join(__dirname, '..', 'public')))
 app.use(express.urlencoded({ extended: true }))
 
 app.use(cookieParser())

@@ -4,7 +4,7 @@ WORKDIR /usr/src/app
 
 COPY . .
 
-RUN npm install && npm run docker-build
+RUN npm install
 
 EXPOSE 3000
 
