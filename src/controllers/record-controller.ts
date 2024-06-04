@@ -29,9 +29,13 @@ class RecordController {
             .setEx(`records:${String(userId)}`, DEFAULT_EXPIRATION, JSON.stringify(records))
         }
 
-        const income = (req.user as { earning?: number }).earning ?? DEFAULT_EARNING
+        const income = records.reduce((subtotal: number, record: { amount: number, class: string }) => {
+          return record.class === '收入' ? subtotal + record.amount : subtotal
+        }, (req.user as { earning?: number }).earning ?? DEFAULT_EARNING)
 
-        const totalExpenses = records.reduce((subtotal: number, record: { amount: number }) => subtotal + record.amount, 0)
+        const totalExpenses = records.reduce((subtotal: number, record: { amount: number, class: string }) => {
+          return record.class === '支出' ? subtotal + record.amount : subtotal
+        }, 0)
 
         const balance = income - totalExpenses
 
