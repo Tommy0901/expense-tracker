@@ -9,9 +9,27 @@ import { allNotNullOrEmpty, idCheck } from '../helpers/validation-helper'
 const DEFAULT_EARNING = 6000
 const DEFAULT_EXPIRATION = 3600
 
+interface AuthenticatedRequest extends Request {
+  user: {
+    _id: string | Types.ObjectId
+    name: string
+    email: string
+    createAt: string | Date
+    __v: number
+  }
+}
+
+interface RequestBody {
+  classType: string
+  item: string
+  date: string
+  type: string
+  amount: string
+}
+
 class RecordController {
   getRecords (req: Request, res: Response, next: NextFunction): void {
-    const userId = (req.user as { _id: string | Types.ObjectId })._id
+    const { _id: userId } = (req as AuthenticatedRequest).user
 
     void (async () => {
       try {
@@ -49,17 +67,9 @@ class RecordController {
   addRecord (req: Request, res: Response, next: NextFunction): void {
     if (req.method === 'GET') { res.render('new'); return }
 
-    const { _id: userId } = req.user as { _id: string | Types.ObjectId }
+    const { _id: userId } = (req as AuthenticatedRequest).user
 
     const { classType, item, date, type, amount } = req.body as RequestBody
-
-    interface RequestBody {
-      classType: string
-      item: string
-      date: string
-      type: string
-      amount: string
-    }
 
     if (allNotNullOrEmpty(classType, item, date, type, amount)) {
       res.send('Please input class, item name, date, type and amount!'); return
@@ -94,8 +104,7 @@ class RecordController {
   }
 
   editRecord (req: Request, res: Response, next: NextFunction): void {
-    const userId = (req.user as { _id: string | Types.ObjectId })._id
-    const id = req.params.id
+    const { user: { _id: userId }, params: { id } } = req as AuthenticatedRequest
 
     if (idCheck(id)) { res.send('Invalid id parameter.'); return }
 
@@ -130,14 +139,6 @@ class RecordController {
       })(); return
     }
     const { classType, item, date, type, amount } = req.body as RequestBody
-
-    interface RequestBody {
-      classType: string
-      item: string
-      date: string
-      type: string
-      amount: string
-    }
 
     if (allNotNullOrEmpty(classType, item, date, type, amount)) {
       res.send('Please input class, item name, date, type and amount!'); return
@@ -182,8 +183,7 @@ class RecordController {
   }
 
   removeRecord (req: Request, res: Response, next: NextFunction): void {
-    const userId = (req.user as { _id: Types.ObjectId })._id
-    const id = req.params.id
+    const { user: { _id: userId }, params: { id } } = req as AuthenticatedRequest
 
     if (idCheck(id)) { res.send('Invalid id parameter.'); return }
 

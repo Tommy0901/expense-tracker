@@ -6,9 +6,18 @@ import { redisClient } from './'
 
 const DEFAULT_EXPIRATION = 3600
 
+interface UserDocument {
+  _id: Types.ObjectId
+  name: string
+  email: string
+  password: string
+  createAt: Date
+  __v: number
+}
+
 passport.serializeUser((user, done) => {
-  const { password, ...redisData } = user as { password: string, redisData: object }
-  const { _id: id } = user as { _id: Types.ObjectId }
+  const { password, ...redisData } = user as UserDocument
+  const { _id: id } = redisData
 
   void redisClient
     .setEx(`id:${String(id)}`, DEFAULT_EXPIRATION, JSON.stringify(redisData))

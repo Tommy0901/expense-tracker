@@ -6,17 +6,27 @@ import { User } from '../models'
 import { setCookies } from '../middlewares/cookie-handler'
 import { allNotNullOrEmpty } from '../helpers/validation-helper'
 
+interface RequestBody {
+  name: string
+  email: string
+  password: string
+  confirmPassword: string
+  rememberMe?: string
+}
+
+type MySpending = '' | { email: string, remember: 'on' }
+
 class UserController {
   signUp (req: Request, res: Response, next: NextFunction): void {
     if (req.method === 'GET') { res.render('register'); return }
 
-    const { name, email, password, confirmPassword } = req.body
+    const { name, email, password, confirmPassword } = req.body as RequestBody
 
     if (allNotNullOrEmpty(name, email, password)) {
       res.send('Please enter name, email and password!'); return
     }
 
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email as string)) {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       res.send('The email format is invalid.'); return
     }
 
@@ -44,10 +54,10 @@ class UserController {
 
   signIn (req: Request, res: Response, next: NextFunction): void {
     if (req.method === 'GET') {
-      res.render('login', { ...req.cookies?.mySpending as { email: string, remember: string } | '' }); return
+      res.render('login', { ...req.cookies?.mySpending as MySpending }); return
     }
 
-    const { email, password, rememberMe } = req.body as { email: string, password: string, rememberMe: string | undefined }
+    const { email, password, rememberMe } = req.body as RequestBody
 
     void (async () => {
       try {
