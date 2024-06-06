@@ -1,13 +1,10 @@
 import { type Request, type Response, type NextFunction } from 'express'
-import mongoose, { type Types } from 'mongoose'
-import dayjs from 'dayjs'
+import { type Types } from 'mongoose'
 
-import { Category, Record } from '../models'
-import { redisClient } from '../config'
 import { allNotNullOrEmpty, idCheck } from '../helpers/validation-helper'
 
-const DEFAULT_EARNING = 6000
-const DEFAULT_EXPIRATION = 3600
+import RecordService from '../services/record-service'
+import CategoryService from '../services/category-service'
 
 interface AuthenticatedRequest extends Request {
   user: {
@@ -20,38 +17,33 @@ interface AuthenticatedRequest extends Request {
 }
 
 interface RequestBody {
-  classType: string
+  classType: '收入' | '支出'
   item: string
   date: string
   type: string
   amount: string
 }
 
+const DEFAULT_INCOME = 6000
+
 class RecordController {
+  private readonly recordService = new RecordService()
+  private readonly categoryService = new CategoryService()
+
   getRecords (req: Request, res: Response, next: NextFunction): void {
     const { _id: userId } = (req as AuthenticatedRequest).user
 
     void (async () => {
       try {
-        const redisData = await redisClient.get(`records:${String(userId)}`)
+        const records = await this.recordService.findRecords(userId)
 
-        const records = redisData != null
-          ? JSON.parse(redisData)
-          : (await Record.find({ userId }).populate('categoryId').lean())
-              .map(record => ({
-                ...record, date: dayjs(record.date).format('YYYY-MM-DD')
-              }))
+        const initialIncome = (req.user as { earning?: number }).earning ?? DEFAULT_INCOME
 
-        if (redisData == null) {
-          void redisClient
-            .setEx(`records:${String(userId)}`, DEFAULT_EXPIRATION, JSON.stringify(records))
-        }
-
-        const income = records.reduce((subtotal: number, record: { amount: number, class: string }) => {
+        const income = records.reduce((subtotal, record) => {
           return record.class === '收入' ? subtotal + record.amount : subtotal
-        }, (req.user as { earning?: number }).earning ?? DEFAULT_EARNING)
+        }, initialIncome)
 
-        const totalExpenses = records.reduce((subtotal: number, record: { amount: number, class: string }) => {
+        const totalExpenses = records.reduce((subtotal, record) => {
           return record.class === '支出' ? subtotal + record.amount : subtotal
         }, 0)
 
@@ -77,24 +69,21 @@ class RecordController {
 
     void (async () => {
       try {
-        const categoryMap = new Map((await Category.find().lean()).map(i => [i.type, i._id]))
+        const categoryId = await this.categoryService.getCategoryId(type)
 
-        await Record.create({
+        if (categoryId == null) { res.send('Please select correct category type.'); return }
+
+        const newRecord = {
           item,
           date: new Date(date),
           amount,
           class: classType,
           userId,
-          categoryId: categoryMap.get(type)
-        })
+          categoryId
+        }
 
-        const records = (await Record.find({ userId }).populate('categoryId').lean())
-          .map(record => ({
-            ...record, date: dayjs(record.date).format('YYYY-MM-DD')
-          }))
-
-        void redisClient
-          .setEx(`records:${String(userId)}`, DEFAULT_EXPIRATION, JSON.stringify(records))
+        await this.recordService.createRecord(newRecord)
+        await this.recordService.refreshRecords(userId)
 
         res.redirect('/')
       } catch (err) {
@@ -111,20 +100,8 @@ class RecordController {
     if (req.method === 'GET') {
       void (async () => {
         try {
-          const redisData = await redisClient.get(`records:${String(userId)}`)
-
-          const records = redisData != null
-            ? JSON.parse(redisData)
-            : (await Record.find({ userId }).populate('categoryId').lean())
-                .map(record => ({
-                  ...record, date: dayjs(record.date).format('YYYY-MM-DD')
-                }))
-
-          if (redisData == null) {
-            void redisClient
-              .setEx(`records:${String(userId)}`, DEFAULT_EXPIRATION, JSON.stringify(records))
-          }
-          const record = records.find((record: { _id: string }) => record._id === id)
+          const records = await this.recordService.findRecords(userId)
+          const record = records.find((record) => record._id === id)
 
           if (record == null) {
             res.send('Insufficient permissions to access.'); return
@@ -138,6 +115,7 @@ class RecordController {
         }
       })(); return
     }
+
     const { classType, item, date, type, amount } = req.body as RequestBody
 
     if (allNotNullOrEmpty(classType, item, date, type, amount)) {
@@ -146,9 +124,11 @@ class RecordController {
 
     void (async () => {
       try {
-        const categoryMap = new Map((await Category.find().lean()).map(i => [i.type, i._id]))
+        const categoryId = await this.categoryService.getCategoryId(type)
 
-        const record = await Record.findById(id)
+        if (categoryId == null) { res.send('Please select correct category type.'); return }
+
+        const record = await this.recordService.findRecordById(id)
 
         if (record == null) {
           res.send("Can't find the record."); return
@@ -158,22 +138,16 @@ class RecordController {
           res.send('Insufficient permissions to edit.'); return
         }
 
-        record.item = item
-        record.date = new Date(date)
-        record.amount = Number(amount)
-        record.class = classType
-        record.userId = new mongoose.Types.ObjectId(userId)
-        record.categoryId = new mongoose.Types.ObjectId(categoryMap.get(type))
+        const update = {
+          item,
+          date: new Date(date),
+          amount: Number(amount),
+          class: classType,
+          categoryId
+        }
 
-        await record.save()
-
-        const records = (await Record.find({ userId }).populate('categoryId').lean())
-          .map(record => ({
-            ...record, date: dayjs(record.date).format('YYYY-MM-DD')
-          }))
-
-        void redisClient
-          .setEx(`records:${String(userId)}`, DEFAULT_EXPIRATION, JSON.stringify(records))
+        await this.recordService.updateRecord(record, update)
+        await this.recordService.refreshRecords(userId)
 
         res.redirect('/')
       } catch (err) {
@@ -189,7 +163,7 @@ class RecordController {
 
     void (async () => {
       try {
-        const record = await Record.findById(id)
+        const record = await this.recordService.findRecordById(id)
 
         if (record == null) {
           res.send("Record doesn't exist."); return
@@ -199,15 +173,8 @@ class RecordController {
           res.send('Insufficient permissions to delete.'); return
         }
 
-        await record.deleteOne({ _id: id, userId })
-
-        const records = (await Record.find({ userId }).populate('categoryId').lean())
-          .map(record => ({
-            ...record, date: dayjs(record.date).format('YYYY-MM-DD')
-          }))
-
-        void redisClient
-          .setEx(`records:${String(userId)}`, DEFAULT_EXPIRATION, JSON.stringify(records))
+        await this.recordService.findRecordByIdAndDelete(id)
+        await this.recordService.refreshRecords(userId)
 
         res.redirect('/')
       } catch (err) {
