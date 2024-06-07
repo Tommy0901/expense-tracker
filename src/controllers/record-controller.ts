@@ -31,17 +31,17 @@ class RecordController {
   private readonly categoryService = new CategoryService()
 
   getRecords (req: Request, res: Response, next: NextFunction): void {
-    const { _id: userId } = (req as AuthenticatedRequest).user
+    const { user: { _id: userId }, query: { type } } = req as AuthenticatedRequest & { query: { type?: string } }
 
     void (async () => {
       try {
-        const records = await this.recordService.findRecords(userId)
+        const records = await this.recordService.findRecords(userId, type)
 
         const initialIncome = (req.user as { earning?: number }).earning ?? DEFAULT_INCOME
 
         const income = records.reduce((subtotal, record) => {
           return record.class === '收入' ? subtotal + record.amount : subtotal
-        }, initialIncome)
+        }, type != null ? 0 : initialIncome)
 
         const totalExpenses = records.reduce((subtotal, record) => {
           return record.class === '支出' ? subtotal + record.amount : subtotal

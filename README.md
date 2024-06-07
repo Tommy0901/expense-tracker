@@ -27,7 +27,8 @@
 3. Users can add new income or expense entries.
 4. Users can edit existing income or expense entries
 5. Users can delete existing income or expense entries.
-6. Users can opt to have their login credentials remembered for future logins.
+6. Users can filter income and expense categories by clicking the icon of the type item.
+7. Users can opt to have their login credentials remembered for future logins.
 
 </br>
 

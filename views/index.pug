@@ -30,7 +30,7 @@ block body
       table.table.table-striped
         thead.table-dark
           tr
-            th(scope="col") Type
+            th(scope="col"): a(href="/", style="color: rgb(237, 237, 227); text-decoration: none;") Type
             th(scope="col") Item
             th(scope="col") Date
             th(scope="col") Amount
@@ -40,13 +40,14 @@ block body
         tbody
           each record, i in records
             tr
-              td: i(class=record.categoryId.icon) 
+              td: a(href="/?type=" + record.categoryId._id, style="text-decoration: none;")
+                    i(class=record.categoryId.icon) 
               td= record.item
               td= record.date
               td= record.amount
               td= record.class
               td: a(href="/edit/"+ record._id) 
-                    i.fa-solid.fa-pen-to-square
+                    i.fa-solid.fa-pen-to-square.edit-icon
               td: form(action="/remove/" + record._id + "?_method=DELETE", method="POST", style="display: inline;") 
                     button.delete-icon(type="submit")
                       i.fa-solid.fa-trash-can

@@ -51,7 +51,7 @@ interface UpdateProperties {
 const DEFAULT_EXPIRATION = 3600
 
 class RecordService {
-  async findRecords (userId: Records['userId']): Promise<Records[]> {
+  async findRecords (userId: Records['userId'], type?: Records['categoryId']['_id']): Promise<Records[]> {
     const redisData = await redisClient.get(`records:${String(userId)}`)
 
     const records: Records[] = redisData != null
@@ -66,7 +66,7 @@ class RecordService {
         .setEx(`records:${String(userId)}`, DEFAULT_EXPIRATION, JSON.stringify(records))
     }
 
-    return records
+    return type != null ? records.filter(record => record.categoryId._id === type) : records
   }
 
   async findRecordById (recordId: Records['_id']): Promise<RecordDocument | null> {
